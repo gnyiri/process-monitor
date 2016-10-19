@@ -23,7 +23,7 @@ void ProcessItem::append_child(ProcessItem *item)
 //---------------------------------------------------------
 ProcessItem* ProcessItem::child(const int row)
 {
-  if((row < 0) || (row >= m_children.size()))
+  if((row < 0) || (static_cast<unsigned int>(row) >= m_children.size()))
   {
     qWarning() << "Wrong parameter!";
   }
@@ -36,16 +36,32 @@ int ProcessItem::child_count() const
   return m_children.size();
 }
 //---------------------------------------------------------
-int ProcessItem::column_count()
+int ProcessItem::column_count() const
 {
-  return m_data.size()
+  return m_data.size();
 }
 //---------------------------------------------------------
-int ProcessItem::row()
+int ProcessItem::row() const
 {
+  int l_row = 0;
+
   if(m_parent)
-  {
-    return m_parent->m_children
+  {   
+    for(auto it = m_parent->m_children.begin(); it != m_parent->m_children.end(); it++)
+    {
+      if (*it == this)
+      {
+        break;
+      }
+      l_row++;
+    }
   }
+
+  return l_row;
+}
+//---------------------------------------------------------
+ProcessItem* ProcessItem::parent()
+{
+  return m_parent;
 }
 

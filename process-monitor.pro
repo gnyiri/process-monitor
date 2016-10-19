@@ -14,9 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    processitem.cpp
+    processitem.cpp \
+    processtreemodel.cpp
 
 HEADERS  += mainwindow.h \
-    processitem.h
+    processitem.h \
+    processtreemodel.h
 
 FORMS    += mainwindow.ui
