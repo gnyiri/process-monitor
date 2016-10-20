@@ -2,9 +2,10 @@
 #include "processtreemodel.h"
 
 //---------------------------------------------------------------------
-ProcessTreeModel::ProcessTreeModel(QObject* parent)
+ProcessTreeModel::ProcessTreeModel(QObject* parent) :
+  QAbstractItemModel(parent)
 {
-  m_root_item = ProcessItem(1, 0);
+  m_root_item = new ProcessItem(1, 0);
 }
 //---------------------------------------------------------------------
 ProcessTreeModel::~ProcessTreeModel()
@@ -12,9 +13,9 @@ ProcessTreeModel::~ProcessTreeModel()
   delete m_root_item;
 }
 //---------------------------------------------------------------------
-QVariant ProcessTreeModel::data(const QModelIndex &index, int role)
+QVariant ProcessTreeModel::data(const QModelIndex &index, int role) const
 {
-
+  return QVariant();
 }
 //---------------------------------------------------------------------
 Qt::ItemFlags ProcessTreeModel::flags(const QModelIndex &index) const
