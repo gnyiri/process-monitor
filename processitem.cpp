@@ -7,7 +7,23 @@ ProcessItem::ProcessItem(const pid_t process_id, ProcessItem* parent) :
   m_process_id(process_id),
   m_parent(parent)
 {
+  m_data.push_back(QVariant(m_process_id));
+  m_data.push_back("Data");
+
+  if(m_parent)
+  {
+    m_parent->append_child(this);
+  }
 }
+//---------------------------------------------------------
+ProcessItem::~ProcessItem()
+{
+  for(auto it = m_children.begin(); it != m_children.end(); it++)
+  {
+    delete *it;
+  }
+}
+
 //---------------------------------------------------------
 void ProcessItem::append_child(ProcessItem *item)
 {
@@ -46,7 +62,7 @@ int ProcessItem::row() const
   int l_row = 0;
 
   if(m_parent)
-  {   
+  {
     for(auto it = m_parent->m_children.begin(); it != m_parent->m_children.end(); it++)
     {
       if (*it == this)
@@ -63,5 +79,10 @@ int ProcessItem::row() const
 ProcessItem* ProcessItem::parent()
 {
   return m_parent;
+}
+//---------------------------------------------------------
+QVariant ProcessItem::data(int column) const
+{
+  return m_data[column];
 }
 

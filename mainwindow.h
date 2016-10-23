@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "processtreemodel.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -17,6 +19,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    ProcessTreeModel* m_process_tree_model;
 };
 
 #endif // MAINWINDOW_H

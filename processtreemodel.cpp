@@ -2,10 +2,11 @@
 #include "processtreemodel.h"
 
 //---------------------------------------------------------------------
-ProcessTreeModel::ProcessTreeModel(QObject* parent) :
-  QAbstractItemModel(parent)
+ProcessTreeModel::ProcessTreeModel(QObject* parent)
+  : QAbstractItemModel(parent)
 {
   m_root_item = new ProcessItem(1, 0);
+  build_data();
 }
 //---------------------------------------------------------------------
 ProcessTreeModel::~ProcessTreeModel()
@@ -13,19 +14,54 @@ ProcessTreeModel::~ProcessTreeModel()
   delete m_root_item;
 }
 //---------------------------------------------------------------------
+void ProcessTreeModel::build_data()
+{
+  ProcessItem* m_element_item1 = new ProcessItem(2, m_root_item);
+  ProcessItem* m_element_item2 = new ProcessItem(3, m_element_item1);
+  ProcessItem* m_element_item3 = new ProcessItem(4, m_element_item1);
+}
+//---------------------------------------------------------------------
 QVariant ProcessTreeModel::data(const QModelIndex &index, int role) const
 {
-  return QVariant();
+  if (!index.isValid())
+  {
+    return QVariant();
+  }
+
+  if (role != Qt::DisplayRole)
+  {
+    return QVariant();
+  }
+
+  ProcessItem *item = static_cast<ProcessItem*>(index.internalPointer());
+
+  return item->data(index.column());
 }
 //---------------------------------------------------------------------
 Qt::ItemFlags ProcessTreeModel::flags(const QModelIndex &index) const
 {
+  if (!index.isValid())
+  {
+    return 0;
+  }
 
+  return QAbstractItemModel::flags(index);
 }
 //---------------------------------------------------------------------
 QVariant ProcessTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-
+  if(orientation == Qt::Horizontal && role == Qt::DisplayRole)
+  {
+    if(section == 0)
+    {
+      return QVariant("Name");
+    }
+    else
+    {
+      return QVariant("PID");
+    }
+  }
+  return QVariant();
 }
 //---------------------------------------------------------------------
 QModelIndex ProcessTreeModel::index(int row, int column, const QModelIndex &parent) const

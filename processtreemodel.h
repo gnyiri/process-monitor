@@ -10,6 +10,7 @@ class ProcessItem;
 class ProcessTreeModel : public QAbstractItemModel
 {
   Q_OBJECT
+
 public:
   /*!
    * \brief ProcessTreeModel
@@ -20,6 +21,10 @@ public:
    * \brief ~ProcessTreeModel
    */
   ~ProcessTreeModel();
+  /*!
+   * \brief build_data
+   */
+  void build_data();
 private:
   /*!
    * \brief data
@@ -70,7 +75,6 @@ private:
    * \return
    */
   int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
-private:
   /*!
    * \brief m_root_item
    */

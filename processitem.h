@@ -16,6 +16,10 @@ public:
    */
   ProcessItem(const pid_t process_id, ProcessItem* parent = 0);
   /*!
+   *
+   */
+  ~ProcessItem();
+  /*!
    * \brief append_child
    * \param item
    */
@@ -46,6 +50,10 @@ public:
    * \return
    */
   ProcessItem* parent();
+  /*!
+   *
+   */
+  QVariant data(int column) const;
 private:
   /*!
    * \brief m_process_id

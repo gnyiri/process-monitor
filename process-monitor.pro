@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     processitem.cpp \
-    processtreemodel.cpp
+    processtreemodel.cpp \
+    processtreewidget.cpp
 
 HEADERS  += mainwindow.h \
     processitem.h \
-    processtreemodel.h
+    processtreemodel.h \
+    processtreewidget.h
 
 FORMS    += mainwindow.ui
