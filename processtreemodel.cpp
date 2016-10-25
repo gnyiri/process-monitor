@@ -1,3 +1,14 @@
+#include <fts.h>
+#include <sys/stat.h>
+
+#include <QDebug>
+#include <QString>
+#include <QFile>
+#include <QTextStream>
+#include <QStringList>
+#include <QByteArray>
+#include <fstream>
+
 #include "processitem.h"
 #include "processtreemodel.h"
 
@@ -16,9 +27,46 @@ ProcessTreeModel::~ProcessTreeModel()
 //---------------------------------------------------------------------
 void ProcessTreeModel::build_data()
 {
-  ProcessItem* m_element_item1 = new ProcessItem(2, m_root_item);
-  ProcessItem* m_element_item2 = new ProcessItem(3, m_element_item1);
-  ProcessItem* m_element_item3 = new ProcessItem(4, m_element_item1);
+  char* paths[] = { static_cast<const char*>("/proc/"), 0 };
+  FTS* file_tree = fts_open(paths, FTS_NOCHDIR, 0);
+
+  if(!file_tree)
+  {
+    return;
+  }
+
+  FTSENT* node = 0;
+
+  while((node = fts_read(file_tree)))
+  {
+    if(node->fts_level > 0 && node->fts_name[0] == '.')
+    {
+      fts_set(file_tree, node, FTS_SKIP);
+    }
+    else if(node->fts_info & FTS_F && node->fts_level == 2)
+    {
+      std::string file_name(node->fts_accpath);
+
+      if(std::string(node->fts_name) == "status")
+      {
+        qDebug() << "Found file " << file_name.c_str() << " in " << node->fts_accpath << " at level " << node->fts_level;
+        std::fstream process_file(file_name.c_str(), std::fstream::in);
+        std::string line;
+        while(std::getline(process_file, line))
+        {
+          if(std::string::npos != line.find("Pid:"))
+          {
+            qDebug() << line.c_str();
+          }
+        }
+      }
+    }
+  }
+
+  if(fts_close(file_tree))
+  {
+    return;
+  }
 }
 //---------------------------------------------------------------------
 QVariant ProcessTreeModel::data(const QModelIndex &index, int role) const
